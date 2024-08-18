@@ -1,0 +1,10 @@
+:root {
+    --theme-black: rgb(27,27,37);
+    --theme-light-gray: rgb(227,228,234);
+    --theme-dark-gray: rgb(102,104,121);
+    --theme-orange: rgb(234,163,15);
+
+    font-size: min(20px, 2.5vw);
+
+    font-family: 'Times New Roman', Times, serif;
+}

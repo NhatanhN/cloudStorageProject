@@ -1,0 +1,61 @@
+body {
+    background-color: var(--theme-black);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+p, h1, h2, h3, h4, h5 {
+    color: var(--theme-light-gray);
+    font-weight: normal;
+
+}
+
+input[type="submit"] {
+    width: 7em;
+    background-color: var(--theme-orange);
+    border: none;
+    border-radius: 6px;
+    padding: 4px;
+    font-size: 1rem;
+    margin-top: 10px;
+    margin-left: calc(10px + 1.4rem);
+}
+
+input[type="submit"]:hover {
+    cursor: pointer;
+    filter: brightness(.8);
+}
+
+input[type="text"], input[type="password"] {
+    background-color: var(--theme-dark-gray);
+    color: var(--theme-light-gray);
+    border: none;
+    padding: 4px;
+    margin: 10px;
+    font-size: 1rem;
+}
+
+#formContainer {
+    display: flex;
+    gap: 20px;
+}
+
+.formContainerPart {
+    margin: 7px;
+    padding: 7px;
+}
+
+#divider {
+    border: 1px solid var(--theme-light-gray);
+}
+
+.statusMsg {
+    color: rgb(214, 71, 71);
+    margin: 0;
+    margin-left: calc(10px + 1.4rem);
+    padding: 0;
+}

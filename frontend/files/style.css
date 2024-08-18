@@ -1,0 +1,126 @@
+body {
+    background-color: var(--theme-black);
+    margin: 0;
+    min-height: 100vh;
+    padding: 7vw;
+    box-sizing: border-box;
+}
+
+p, h1, h2, h3, h4, h5, th {
+    color: var(--theme-light-gray);
+    font-weight: normal;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+#logOutButton {
+    width: 7em;
+    background-color: var(--theme-orange);
+    border: none;
+    border-radius: 6px;
+    padding: 4px;
+    font-size: 1rem;
+}
+
+#uploadFileButton {
+    background-color: transparent;
+    border: none;
+    color: var(--theme-light-gray);
+    text-decoration: underline wavy var(--theme-light-gray);
+    font-size: 1.1rem;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+button:hover {
+    cursor: pointer;
+    filter: brightness(.8);
+}
+
+table {
+    display: flex;
+    flex-direction: column;
+    color: var(--theme-light-gray);
+    font-size: 1rem;
+}
+
+.firstCol, .secCol {
+    width: 37vw;
+}
+
+.thirdCol, .fourthCol {
+    width: 13vw;
+    text-align: center;
+}
+
+th {
+    text-align: left;
+}
+
+thead {
+    border-bottom: solid 1px var(--theme-light-gray);
+}
+
+tbody {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#uploadFileModal {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 0vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, .4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    opacity: 0%;
+    transition: cubic-bezier(0.39, 0.575, 0.565, 1) .7s;
+}
+
+#uploadFileBox {
+    background-color: var(--theme-light-gray);
+    border: solid 5px var(--theme-dark-gray);
+    width: 80vw;
+    max-width: 500px;
+    height: 80vw;
+    max-height: 500px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#uploadFileBox h2 {
+    color: black;
+}
+
+#uploadFileForm {
+    display: flex;
+    flex-direction: column;
+}
+
+#uploadFileForm input[type="submit"] {
+    width: 7em;
+    background-color: var(--theme-orange);
+    border: none;
+    border-radius: 6px;
+    padding: 4px;
+    margin-top: 10px;
+    margin-left: 1.5rem;
+}
+
+#uploadFileForm input[type="submit"]:hover {
+    cursor: pointer;
+    filter: brightness(.6);
+}
+
+.thirdCol p:hover, .fourthCol p:hover {
+    cursor: pointer;
+    filter: brightness(.55);
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User</title>
+    <link rel="stylesheet" href="../globals.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h2 id="usernameHeader">Loading...</h2>
+        <button id="uploadFileButton">upload file</button>
+        <button id="logOutButton">log out</button>
+    </header>
+    <table>
+        <thead id="tableHeaders">
+            <tr>
+                <th class="firstCol">File</th>
+                <th class="secCol">Date Added</th>
+                <th class="thirdCol">Download Link</th>
+                <th class="fourthCol">Delete File</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <div id="uploadFileModal">
+        <div id="uploadFileBox">
+            <h2>select a file to upload</h2>
+            <form id="uploadFileForm">
+                <div>
+                    <label for="file">📃</label>
+                    <input type="file" accept="*/*" id="file" name="file"/>
+                </div>
+                <input type="submit">
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+    const destination = "https://4ef1rgyze7.execute-api.us-east-1.amazonaws.com/dev"
+    const locationRelativeToHomepage = "files/index.html"; // 😭
+    let url = location.href.substring(0, location.href.length - locationRelativeToHomepage.length)
+    url += "index.html"
+
+    // this will be set upon load
+    let userID
+
+    const tbody = document.querySelector("tbody")
+    async function fetchAndDisplayAssociatedFiles() {
+        const res = await fetch(`${destination}/users?userID=${userID}`, {
+            method: "GET"
+        })
+
+        const json = await res.json()
+        tbody.innerHTML = ""
+        Object.entries(json).forEach( ([k, v]) => {
+            tbody.insertAdjacentHTML("beforeend", `
+                <tr>
+                    <td class="firstCol">${k}</td>
+                    <td class="secCol">${v.uploadDate.substring(0, 10)}</td>
+                    <td class="thirdCol"><p onclick="(function() { download('${v.fileID}') })()">🔽</p></td>
+                    <td class="fourthCol"><p onclick="(function() { deleteFile('${v.fileID}') })()">❌</p></td>
+                </tr>
+            `)
+        })
+    }
+
+    window.addEventListener("load", async e => {
+        await afterLoad()
+    })
+
+    async function afterLoad() {
+        // assume there is only one cookie
+        // redirects to homepage if there is no user data cookie
+        if (document.cookie == "") location.assign(url)
+        const userData = JSON.parse(document.cookie.substring("user-data=".length))
+        document.getElementById("usernameHeader").innerText = `User ${userData.username}`
+        userID = userData.userID
+
+        await fetchAndDisplayAssociatedFiles()
+    }
+
+    document.getElementById("logOutButton").addEventListener("click", e => {
+        document.cookie = "user-data=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+        location.assign(url)
+    })
+
+    // script for modal
+    const modal = document.getElementById("uploadFileModal")
+    document.getElementById("uploadFileButton").addEventListener("click", e => {
+        modal.style = "height: 100vh; opacity: 100%"
+    })
+
+    modal.addEventListener("click", e => {
+        e.stopPropagation()
+        modal.style = ""
+    })
+
+    document.getElementById("uploadFileBox").addEventListener("click", e => {
+        e.stopPropagation()
+    })
+
+    const uploadForm = document.getElementById("uploadFileForm")
+    uploadForm.addEventListener("submit", async e => {
+        e.preventDefault()
+
+        const fd = new FormData(uploadForm)
+        fd.append("userID", userID)
+        const res = await fetch(`${destination}/files`, {
+            method: "POST",
+            body: fd
+        })
+
+        const json = await res.json()
+
+        await fetchAndDisplayAssociatedFiles()
+        modal.style = ""
+    })
+
+    //downloads a file
+    async function download(fileID) {
+        const res = await fetch(`${destination}/download?fileID=${fileID}`)
+        const json = await res.json()
+
+        if (res.ok) window.open(json.url, "_blank")
+    }
+
+    //delete a file and removes it from the user's list of uploaded files
+    async function deleteFile(fileID) {
+        const res = await fetch(`${destination}/files?userID=${userID}&fileID=${fileID}`, {
+            method: "DELETE"
+        })
+
+        if (res.ok) fetchAndDisplayAssociatedFiles()
+    }
+
+</script>
+</html>

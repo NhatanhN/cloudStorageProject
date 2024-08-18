@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Storage Service</title>
+    <link rel="stylesheet" href="globals.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Cloud Storage Service</h1>
+
+    <div id="formContainer">
+        <div class="formContainerPart">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <label for="loginUsername">👤</label>
+                <input type="text" id="loginUsername" name="username" placeholder="username" minlength="3"/>
+                <br />
+                <label for="loginPassword">🔒</label>
+                <input type="password" id="loginPassword" name="password" placeholder="password" minlength="3"/>
+                <br />
+                <p id="loginStatusMsg" class="statusMsg"></p>
+                <input type="submit" value="login"/>
+            </form>
+        </div>
+        <div id="divider"></div>
+        <div class="formContainerPart">
+            <h2>Sign up</h2>
+            <form id="signupForm">
+                <label for="signupUsername">👤</label>
+                <input type="text" id="signupUsername" name="username" placeholder="username" minlength="4"/>
+                <br />
+                <label for="signupPassword">🔒</label>
+                <input type="password" id="signupPassword" name="password" placeholder="password" minlength="4"/>
+                <br />
+                <p id="signupStatusMsg" class="statusMsg"></p>
+                <input type="submit" value="sign up"/>
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+    const destination = "https://4ef1rgyze7.execute-api.us-east-1.amazonaws.com/dev"
+    const loginForm = document.getElementById("loginForm")
+    const signupForm = document.getElementById("signupForm")
+
+    loginForm.addEventListener("submit", async e =>  {
+        e.preventDefault()
+        try {
+            let res
+            res = await fetch(`${destination}/login`, {
+                method: "POST",
+                body: new FormData(loginForm)
+            })
+    
+            const json = await res.json()
+            document.cookie = `user-data=${JSON.stringify(json)}`
+
+            let url = window.location.href
+            // ?? fix this later
+            const nameOfThisFile = "index.html"
+            url = url.substring(0, url.length - nameOfThisFile.length)
+            location.assign(`${url}files/index.html`)
+        } catch (e) {
+            console.log(e)
+            const loginStatusMsg = document.getElementById("loginStatusMsg")
+            loginStatusMsg.innerText = "Error logging in"
+        }
+    })
+
+    signupForm.addEventListener("submit", async e => {
+        e.preventDefault()
+
+        try {
+            let res
+            res = await fetch(`${destination}/users`, {
+                method: "POST",
+                body: new FormData(signupForm)
+            })
+    
+            const json = await res.json()
+            document.cookie = `user-data=${JSON.stringify(json)}`
+
+            let url = window.location.href
+            // ?? fix this later
+            const nameOfThisFile = "index.html"
+            url = url.substring(0, url.length - nameOfThisFile.length)
+            location.assign(`${url}files/index.html`)
+        } catch (e) {
+            console.log(e)
+            const signupStatusMsg = document.getElementById("signupStatusMsg")
+            signupStatusMsg.innerText = "Error signing in"
+        }
+    })
+
+</script>
+</html>
